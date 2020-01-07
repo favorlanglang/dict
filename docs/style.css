@@ -1,0 +1,111 @@
+/* Self compiled html */
+h1 {
+  font-size: 45px;
+  text-align: center;
+  font-weight: bold;
+}
+header {
+  position: fixed;
+  width: 100%;
+  height: 50px;
+  top: 0;
+  left: 0;
+  text-align: center;
+  background: rgb(90, 90, 90);
+  color: white;
+}
+header ul {
+  list-style: none;
+}
+header ul > li {
+  display: inline-block;
+  width: 33%;
+}
+div.dict {
+  width: 75%;
+  margin: 10px auto;
+  padding-top: 60px;
+}
+
+.item {
+  padding: 10px;
+  /* border-radius: 10px; */
+}
+
+.item:nth-child(2n+1) {
+  background: rgb(246, 246, 246);
+}
+
+.lemma {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 1.2em;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.page {
+  font-size: 0.8em;
+  float: right;
+}
+
+.page::before {
+  content: "Original pagenum: ";
+}
+
+.zh-def::before {
+  display: block;
+  font-weight: bold;
+  font-size: 0.7em;
+  color: rgb(104, 104, 104);
+  content: "中文釋義"
+}
+
+.ori-def::before {
+  display: block;
+  font-weight: bold;
+  font-size: 0.7em;
+  color: rgb(104, 104, 104);
+  content: "原文釋義"
+}
+.toc {
+  list-style-type: none;
+  position: fixed;
+  left: 0.2%;
+  bottom: 3px;
+}
+.toc {
+  line-height: 1.25em;
+  font-size: 1.1em;
+  font-family: Monaco, monaco, Consolas, "Lucida Console", monospace;
+}
+.toc a:visited, .toc a{
+  color: blue;
+  text-decoration: none;
+}
+.toc a:hover {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+@media print {
+  body {
+    width: 100% !important;
+  }
+    div.dict {
+      width: 85% !important;
+    }
+  .toc, header {
+    display: none;
+  }
+  @page {
+     margin: 0.6cm;
+     size: 210mm 297mm;
+  }
+  @bottom-left {  /* paged.js style */
+    content: counter(page);
+  }
+  .item {
+    page-break-inside: avoid !important;
+  }
+}
+
