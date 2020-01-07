@@ -16,11 +16,21 @@ header {
 }
 header ul {
   list-style: none;
+  margin: 15px 0;
 }
 header ul > li {
   display: inline-block;
   width: 33%;
 }
+header a:visited, header a{
+  color: white;
+  text-decoration: none;
+}
+header a:hover {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
 div.dict {
   width: 75%;
   margin: 10px auto;
