@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import os
-import random
 from bs4 import BeautifulSoup
 
 def createItem(lemma: str, page: str, zh_def: str, ori_def: str, item_id=None, lemma_id=None):
@@ -83,15 +82,15 @@ def main():
 
 
     #---------------- Convert pd to HTML file ---------------------#
-    random.seed(2020)
     toc_id = []
     lemma_id = []
     dict_string = ''
     lemma = "1"
+    lemma_counter = {}
     for idx, row in merged_df.iterrows():
-        
         # Check change of alphabet
-        if row['詞條'].strip()[0].lower() != lemma[0].lower():
+        lemma_str = row['詞條'].strip().lower().replace(' ', '')
+        if lemma_str[0] != lemma[0].lower():
             alphabet = row['詞條'].strip()[0].lower()
             item_id = f"{alphabet}-first"
             if item_id in toc_id or item_id in ["*-first", "_-first"]:
@@ -101,7 +100,11 @@ def main():
         else:
             item_id = None
         # Write to HTML
-        lid = f"{row['詞條'].strip()[0].lower()}" + f"_{str(random.random())[2:7]}"
+        if lemma_str in lemma_counter.keys():
+            lemma_counter[lemma_str] += 1
+        else:
+            lemma_counter[lemma_str] = 1
+        lid = lemma_str + f"_{lemma_counter[lemma_str]}"
         item = createItem(row['詞條'].strip(), row['頁數'].strip(), row['中文'].strip(), row['釋義'].strip(), item_id=item_id, lemma_id=lid)
         dict_string += item
         # Record alphabet data for next loop
