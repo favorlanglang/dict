@@ -12,7 +12,7 @@ View the transcribed dictionary [here](https://favorlanglang.github.io/dict/).
 python3 main.py
 ```
 
-This generates `favorlang_dict.csv`, `docs/index.html`, and `docs/favorlang_dict_transcribed.pdf`.
+This generates `docs/dict.html`, `docs/favorlang_dict_transcribed.pdf`, `docs/dict.json`, `docs/dict.csv`.
 
 ### Prerequisites
 

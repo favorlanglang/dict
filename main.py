@@ -42,7 +42,7 @@ def import_from_gsheet():
         df['轉寫者'] = sheet
         dfs.append(df)
     merged_df = pd.concat(dfs, sort=False, ignore_index=True)
-    merged_df.to_csv("favorlang_dict.csv", index=False)
+    #merged_df.to_csv("favorlang_dict.csv", index=False)
 
     return merged_df
 
@@ -78,7 +78,7 @@ def main():
     #------------------ Config ------------------#
     chrome_binary = 'chromium-browser'
     title = "Favorlang Dictionary"
-    html_file = "docs/index.html"
+    html_file = "docs/dict.html"
     pdfFile = 'docs/favorlang_dict_transcribed.pdf'
     html_template = """
     <!DOCTYPE html>
@@ -111,6 +111,13 @@ def main():
 
     #--------------------- Get data from google sheets -------------------#
     merged_df = import_from_gsheet()
+    output_df = merged_df.copy()
+    output_df.columns = ['lemma', 'zh-def', 'syllable', 'ori-def', 'ori-page', 'comment', 'annotator']
+    
+    #---------------- Save as text data --------------#
+    output_df[['lemma', 'zh-def', 'ori-def', 'ori-page']].to_json("docs/dict.json", force_ascii=False)
+    output_df[['lemma', 'zh-def', 'ori-def', 'ori-page']].to_csv("docs/dict.csv")
+    
     #---------------- Index lemma mentioned in def ----------------#
     all_lemma = get_all_lemma(merged_df)
     merged_df['釋義'] = index_lemma_in_def(merged_df, all_lemma)
