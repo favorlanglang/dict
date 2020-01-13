@@ -115,7 +115,7 @@ def main():
     output_df.columns = ['lemma', 'zh-def', 'syllable', 'ori-def', 'ori-page', 'comment', 'annotator']
     
     #---------------- Save as text data --------------#
-    output_df[['lemma', 'zh-def', 'ori-def', 'ori-page']].to_json("docs/dict.json", force_ascii=False)
+    output_df[['lemma', 'zh-def', 'ori-def', 'ori-page']].to_json("docs/dict.json", orient='records', force_ascii=False)
     output_df[['lemma', 'zh-def', 'ori-def', 'ori-page']].to_csv("docs/dict.csv")
     
     #---------------- Index lemma mentioned in def ----------------#
