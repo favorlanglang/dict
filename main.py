@@ -42,8 +42,10 @@ def import_from_gsheet():
         df['轉寫者'] = sheet
         dfs.append(df)
     merged_df = pd.concat(dfs, sort=False, ignore_index=True)
-    #merged_df.to_csv("favorlang_dict.csv", index=False)
-
+    
+    # Strip whitespaces
+    for col in merged_df.columns:
+        merged_df[col] = pd.core.strings.str_strip(merged_df[col])
     return merged_df
 
 
@@ -116,7 +118,7 @@ def main():
     
     #---------------- Save as text data --------------#
     output_df[['lemma', 'zh-def', 'ori-def', 'ori-page']].to_json("docs/dict.json", orient='records', force_ascii=False)
-    output_df[['lemma', 'zh-def', 'ori-def', 'ori-page']].to_csv("docs/dict.csv")
+    output_df[['lemma', 'zh-def', 'ori-def', 'ori-page']].to_csv("docs/dict.csv", index=False)
     
     #---------------- Index lemma mentioned in def ----------------#
     all_lemma = get_all_lemma(merged_df)
