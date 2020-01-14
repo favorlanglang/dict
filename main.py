@@ -203,6 +203,7 @@ def main():
     with open("docs/dict-toc.json", "w", encoding="utf-8") as f:
         toc_tup = [(id_, id_[0].upper()) for id_ in toc_id]
         f.write(json.dumps(toc_tup, ensure_ascii=False))
+    
     # Print to PDF
     #--------- Print to PDF with Chrome ---------#
     os.system(f'{chrome_binary} --headless --disable-gpu --print-to-pdf={pdfFile} --run-all-compositor-stages-before-draw {html_file}')
