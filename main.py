@@ -141,6 +141,7 @@ def main():
     output_df[['lemma', 'zh-def', 'ori-def', 'ori-page']].to_json("docs/dict.json", orient='records', force_ascii=False)
     output_df[['lemma', 'lemma_norm', 'zh-def', 'ori-def', 'ori-def_norm', 'ori-page']].to_json("docs/dict-normalized.json", orient='records', force_ascii=False)
     output_df[['lemma', 'zh-def', 'ori-def', 'ori-page']].to_csv("docs/dict.csv", index=False)
+    merged_df[['詞條', '釋義', '中文', '頁數']].to_csv("docs/dict-chinese.csv", index=False)
     
     #---------------- Index lemma mentioned in def ----------------#
     all_lemma = get_all_lemma(merged_df)
