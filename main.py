@@ -32,6 +32,22 @@ def createItem(lemma: str, page: str, zh_def: str, ori_def: str, item_id=None, l
 
     return str(item_tag)
 
+
+def normStr(text):
+    text = text.lower().strip()
+    new_text = ''
+    for c in text:
+        replaced = False
+        for charset, repl in [("ûúü", "u"), ("óôò", "o"), ("ëêé", "e"), ("âäàá", "a"), ("í", "i"), ("。", "."), ("，", ",")]:
+            if c in charset:
+                new_text += repl
+                replaced = True
+                break
+        if not replaced:
+            new_text += c
+    return new_text
+
+
 def import_from_gsheet():
     gids = ['679511153', '1931724449', '151044886', '1128079217', '1431072574', '866770763', '1207822401', '396391367', '1345694829', '939992016', '971568665', '1842077571']
     pages = ['妤蓁_13-41', '曉鈞_42-70', '容榕_71-99', '永賦_100-128', '庭瑋_129-157', '飛揚_158-186', '俊宏_187-215', '瑞恩_216-244', '凱弘_247-273', '晴方_274-302', '莊勻_303-331', '峻維_326-360']
@@ -46,6 +62,11 @@ def import_from_gsheet():
     # Strip whitespaces
     for col in merged_df.columns:
         merged_df[col] = pd.core.strings.str_strip(merged_df[col])
+    
+    # Normalize text
+    for col in ['詞條', '釋義']:
+        merged_df[col + '_norm'] = [text for text in map(normStr, merged_df[col])]
+    
     return merged_df
 
 
@@ -114,10 +135,11 @@ def main():
     #--------------------- Get data from google sheets -------------------#
     merged_df = import_from_gsheet()
     output_df = merged_df.copy()
-    output_df.columns = ['lemma', 'zh-def', 'syllable', 'ori-def', 'ori-page', 'comment', 'annotator']
+    output_df.columns = ['lemma', 'zh-def', 'syllable', 'ori-def', 'ori-page', 'comment', 'annotator', 'lemma_norm', 'ori-def_norm']
     
     #---------------- Save as text data --------------#
     output_df[['lemma', 'zh-def', 'ori-def', 'ori-page']].to_json("docs/dict.json", orient='records', force_ascii=False)
+    output_df[['lemma', 'lemma_norm', 'zh-def', 'ori-def', 'ori-def_norm', 'ori-page']].to_json("docs/dict-normalized.json", orient='records', force_ascii=False)
     output_df[['lemma', 'zh-def', 'ori-def', 'ori-page']].to_csv("docs/dict.csv", index=False)
     
     #---------------- Index lemma mentioned in def ----------------#
