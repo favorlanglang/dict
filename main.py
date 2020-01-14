@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import json
 import re
 import os
 from bs4 import BeautifulSoup
@@ -152,6 +153,7 @@ def main():
     toc_id = []
     lemma_id = []
     dict_string = ''
+    dict_json = []
     lemma = "1"
     lemma_counter = {}
     for idx, row in merged_df.iterrows():
@@ -174,16 +176,33 @@ def main():
         lid = lemma_str + f"_{lemma_counter[lemma_str]}"
         item = createItem(row['詞條'].strip(), row['頁數'].strip(), row['中文'].strip(), row['釋義'].strip(), item_id=item_id, lemma_id=lid)
         dict_string += item
+        # Write to json for Vue web page
+        dict_json.append({
+            'lemma': row['詞條'].strip(),
+            'page': row['頁數'].strip(),
+            'zh-def': row['中文'].strip(), 
+            'ori-def': row['釋義'].strip(),
+            'item_id': item_id,
+            'lemma_id': lid
+        })
         # Record alphabet data for next loop
         lemma = row['詞條'].strip()
     # Write dict toc
     li = ["<li><a href='#" + id_ + f"'>{id_[0].upper()}</a></li>" for id_ in toc_id]
+    
+    
     # Write html template
     html = html_template.format(title=title,
                                 dictionary=dict_string,
-                                toc=''.join(li))    
+                                toc=''.join(li))
     with open(html_file, 'w', encoding="utf-8") as f:
         f.write(html)
+    # Write JSON
+    with open("docs/dict-indexed.json", "w", encoding="utf-8") as f:
+        f.write(json.dumps(dict_json, ensure_ascii=False))
+    with open("docs/dict-toc.json", "w", encoding="utf-8") as f:
+        toc_tup = [(id_, id_[0].upper()) for id_ in toc_id]
+        f.write(json.dumps(toc_tup, ensure_ascii=False))
     # Print to PDF
     #--------- Print to PDF with Chrome ---------#
     os.system(f'{chrome_binary} --headless --disable-gpu --print-to-pdf={pdfFile} --run-all-compositor-stages-before-draw {html_file}')
