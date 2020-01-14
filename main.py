@@ -199,10 +199,10 @@ def main():
         f.write(html)
     # Write JSON
     with open("docs/dict-indexed.json", "w", encoding="utf-8") as f:
-        f.write(json.dumps(dict_json, ensure_ascii=False))
+        json.dump(dict_json, f, ensure_ascii=False)
     with open("docs/dict-toc.json", "w", encoding="utf-8") as f:
         toc_tup = [(id_, id_[0].upper()) for id_ in toc_id]
-        f.write(json.dumps(toc_tup, ensure_ascii=False))
+        json.dump(toc_tup, f, ensure_ascii=False)
     
     # Print to PDF
     #--------- Print to PDF with Chrome ---------#
