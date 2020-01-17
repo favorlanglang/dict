@@ -50,27 +50,14 @@ def normStr(text):
 
 
 def import_from_gsheet():
-    gids = ['679511153', '1931724449', '151044886', '1128079217', '1431072574', '866770763', '1207822401', '396391367', '1345694829', '939992016', '971568665', '1842077571', '404546534']
-    pages = ['妤蓁_13-41', '曉鈞_42-70', '容榕_71-99', '永賦_100-128', '庭瑋_129-157', '飛揚_158-186', '俊宏_187-215', '瑞恩_216-244', '凱弘_247-273', '晴方_274-302', '莊勻_303-331', '峻維_326-360', 'Mateja']
-    url = "https://docs.google.com/spreadsheets/d/186qohB4p9_ewDqggE547E92bxYTILKuSm26PWljVInk/export?format=csv&gid={gid}"
-    dfs = []
-    for gid, sheet in zip(gids, pages):
-        df =pd.read_csv(url.format(gid=gid), dtype='str',
-            usecols=['詞條', '中文', '音節', '釋義', '頁數', '備註']
-        ).dropna(subset=["詞條", "釋義"]).replace(np.nan, '')
-        df['轉寫者'] = sheet
-        dfs.append(df)
-    merged_df = pd.concat(dfs, sort=False, ignore_index=True)
-    
-    # Strip whitespaces
-    for col in merged_df.columns:
-        merged_df[col] = pd.core.strings.str_strip(merged_df[col])
-    
+    url = "https://docs.google.com/spreadsheets/d/1rqxivcJD8XFjbOMo2rG_FHCwiKeoBjqXCfPrHLYZQ1Y/export?format=tsv&gid={gid}"
+    df = pd.read_csv(url.format(gid='2080601935'), dtype='str', sep='\t').dropna(subset=["詞條", "釋義"]).replace(np.nan, '')
+    # Backup
+    df.to_csv("favorlang_dict.tsv", index=False, sep="\t")
     # Normalize text
     for col in ['詞條', '釋義']:
-        merged_df[col + '_norm'] = [text for text in map(normStr, merged_df[col])]
-    
-    return merged_df
+        df[col + '_norm'] = [text for text in map(normStr, df[col])]
+    return df
 
 
 def get_all_lemma(df, lemma_col='詞條'):

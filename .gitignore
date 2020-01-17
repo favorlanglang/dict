@@ -2,3 +2,4 @@ __pycache__
 .ipynb_checkpoints
 favorlang_dict.csv
 *.ipynb
+main-ori.py
