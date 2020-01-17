@@ -50,7 +50,7 @@ def normStr(text):
 
 def import_from_gsheet():
     url = "https://docs.google.com/spreadsheets/d/1-DULpMhGkDA1kRx6rKuB8dtkqLgBxjgYt9lt5-sVCUs/export?format=tsv&gid={gid}"
-    df = pd.read_csv(url.format(gid='2080601935'), dtype='str', sep='\t').dropna(subset=["詞條", "釋義"]).replace(np.nan, '')
+    df = pd.read_csv(url.format(gid='1889397846'), dtype='str', sep='\t').dropna(subset=["詞條", "釋義"]).replace(np.nan, '')
     # Backup
     df.to_csv("favorlang_dict.tsv", index=False, sep="\t")
     # Normalize text
