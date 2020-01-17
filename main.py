@@ -55,7 +55,9 @@ def import_from_gsheet():
     url = "https://docs.google.com/spreadsheets/d/186qohB4p9_ewDqggE547E92bxYTILKuSm26PWljVInk/export?format=csv&gid={gid}"
     dfs = []
     for gid, sheet in zip(gids, pages):
-        df = pd.read_csv(url.format(gid=gid), dtype='str').dropna(subset=["詞條", "釋義"]).replace(np.nan, '')
+        df =pd.read_csv(url.format(gid=gid), dtype='str',
+            usecols=['詞條', '中文', '音節', '釋義', '頁數', '備註']
+        ).dropna(subset=["詞條", "釋義"]).replace(np.nan, '')
         df['轉寫者'] = sheet
         dfs.append(df)
     merged_df = pd.concat(dfs, sort=False, ignore_index=True)
