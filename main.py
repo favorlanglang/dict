@@ -48,9 +48,8 @@ def normStr(text):
             new_text += c
     return new_text
 
-
 def import_from_gsheet():
-    url = "https://docs.google.com/spreadsheets/d/1rqxivcJD8XFjbOMo2rG_FHCwiKeoBjqXCfPrHLYZQ1Y/export?format=tsv&gid={gid}"
+    url = "https://docs.google.com/spreadsheets/d/1-DULpMhGkDA1kRx6rKuB8dtkqLgBxjgYt9lt5-sVCUs/export?format=tsv&gid={gid}"
     df = pd.read_csv(url.format(gid='2080601935'), dtype='str', sep='\t').dropna(subset=["詞條", "釋義"]).replace(np.nan, '')
     # Backup
     df.to_csv("favorlang_dict.tsv", index=False, sep="\t")
